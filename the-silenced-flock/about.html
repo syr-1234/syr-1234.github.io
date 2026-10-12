@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All About Us</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: rgb(214, 26, 26);
+      font-family: Arial, sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .page-wrap {
+      min-height: 100vh;
+      padding: 28px 32px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 42px;
+    }
+
+    .title-area {
+      max-width: 900px;
+    }
+
+    .small-label {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+
+    .title-area h1 {
+      margin: 0 0 18px 0;
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: 1.05;
+      font-weight: 800;
+    }
+
+    .page-nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 16px;
+      text-transform: lowercase;
+    }
+
+    .page-nav a {
+      transition: opacity 0.2s ease;
+    }
+
+    .page-nav a:hover {
+      opacity: 0.65;
+    }
+
+    .about-content {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 18px;
+    }
+
+    .about-content p {
+      font-size: 19px;
+      line-height: 2;
+      margin: 0 0 22px 0;
+    }
+
+    .closing-note {
+      max-width: 860px;
+      margin: 40px auto 0;
+      padding: 30px 20px;
+      border-top: 2px solid rgb(214, 26, 26);
+      border-bottom: 2px solid rgb(214, 26, 26);
+      text-align: center;
+    }
+
+    .closing-note p {
+      margin: 0;
+      font-size: clamp(1.25rem, 2.3vw, 1.9rem);
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    @media (max-width: 680px) {
+      .page-wrap {
+        padding: 24px 18px 48px;
+      }
+
+      .page-nav {
+        gap: 14px;
+        font-size: 14px;
+      }
+
+      .about-content p {
+        font-size: 17px;
+        line-height: 1.9;
+      }
+
+      .closing-note p {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="top-bar">
+      <div class="title-area">
+        <div class="small-label">About</div>
+        <h1>All About Us</h1>
+        <nav class="page-nav">
+          <a href="index.html">home</a>
+          <a href="zine.html">zine</a>
+          <a href="topic.html">topic</a>
+          <a href="forum.html">the forum</a>
+          <a href="offline.html">offline events</a>
+          <a href="case.html">censorship cases</a>
+        </nav>
+      </div>
+    </div>
+
+    <main class="about-content">
+      <div class="section-label">Project introduction</div>
+
+      <p>
+        The Silent Flock is a digital media project we did to explore the suppression of women’s health content on social media platforms.
+      </p>
+
+      <p>
+        As students, we are increasingly aware of how difficult it is to obtain clear and reliable information about women’s health online. Through personal experience and observation, we have noticed patterns of limitations, confusion, and silence surrounding these topics.
+      </p>
+
+      <p>
+        The platform therefore brings together user experience, platform observations, and collected data to make these patterns more visible.
+      </p>
+
+      <p>
+        The purpose of this project is not to provide solutions, but to create a space for visibility, reflection, and discussion.
+      </p>
+
+      <p>
+        This project primarily addresses the issues of young women navigating online health information, but also invites a wider audience to reflect on platform dynamics.
+      </p>
+    </main>
+
+    <section class="closing-note">
+      <p>
+        Explore stories, data and experiences shared across the site to understand how this issue unfolds in everyday digital life.
+      </p>
+    </section>
+  </div>
+</body>
+</html>

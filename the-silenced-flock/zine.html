@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zine</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: rgb(214, 26, 26);
+      font-family: Arial, sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .page-wrap {
+      min-height: 100vh;
+      padding: 28px 32px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .title-area {
+      max-width: 900px;
+    }
+
+    .title-area .small-label {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+
+    .title-area h1 {
+      margin: 0 0 18px 0;
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: 1.05;
+      font-weight: 800;
+    }
+
+    .page-nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-size: 16px;
+      text-transform: lowercase;
+    }
+
+    .page-nav a {
+      transition: opacity 0.2s ease;
+    }
+
+    .page-nav a:hover {
+      opacity: 0.65;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .controls button {
+      border: none;
+      background: rgb(195, 96, 96);
+      color: rgb(0, 0, 0);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .controls button:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    .controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .indicator {
+      min-width: 90px;
+      text-align: center;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .book-stage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0 10px;
+    }
+
+    .book {
+      width: min(1400px, 94vw);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: transparent;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    .book::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 10px;
+      transform: translateX(-50%);
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.35),
+        rgba(255, 255, 255, 0.04),
+        rgba(0, 0, 0, 0.35)
+      );
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .page-side {
+      position: relative;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .page-side.left {
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .page-side.right {
+      border-left: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .page-side img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: transparent;
+    }
+
+    .empty-page {
+      width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: rgba(78, 78, 78, 0.25);
+      font-size: 18px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: black;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.65;
+      margin-top: 14px;
+    }
+
+    .zine-caption {
+      text-align: center;
+      margin: 24px auto 48px;
+      max-width: 900px;
+      font-size: 26px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .content-section {
+      max-width: 980px;
+      margin-bottom: 44px;
+    }
+
+    .section-label {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 16px;
+    }
+
+    .content-section p {
+      font-size: 20px;
+      line-height: 1.9;
+      margin: 0 0 18px 0;
+    }
+
+    .quote-block {
+      max-width: 1020px;
+      margin: 0 0 52px 0;
+      padding: 28px 30px;
+      border-left: 4px solid rgb(214, 26, 26);
+      background: rgba(214, 26, 26, 0.08);
+    }
+
+    .quote-block .quote-title {
+      margin: 0 0 16px 0;
+      font-size: 21px;
+      line-height: 1.8;
+      font-weight: 700;
+    }
+
+    .quote-block ul {
+      margin: 0;
+      padding-left: 24px;
+    }
+
+    .quote-block li {
+      margin-bottom: 12px;
+      font-size: 19px;
+      line-height: 1.85;
+    }
+
+    .final-statement {
+      margin-top: 30px;
+      padding: 36px 20px;
+      border-top: 2px solid rgb(214, 26, 26);
+      border-bottom: 2px solid rgb(214, 26, 26);
+      text-align: center;
+    }
+
+    .final-statement p {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 3.1rem);
+      line-height: 1.2;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .book {
+        width: 94vw;
+        aspect-ratio: 3 / 4;
+        grid-template-columns: 1fr;
+      }
+
+      .book::after {
+        display: none;
+      }
+
+      .page-side.left {
+        display: none;
+      }
+
+      .page-side.right {
+        border-left: none;
+      }
+
+      .indicator {
+        min-width: auto;
+      }
+
+      .zine-caption {
+        font-size: 21px;
+      }
+
+      .content-section p,
+      .quote-block li,
+      .quote-block .quote-title {
+        font-size: 17px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page-wrap {
+        padding: 24px 18px 48px;
+      }
+
+      .page-nav {
+        gap: 14px;
+        font-size: 14px;
+      }
+
+      .zine-caption {
+        font-size: 18px;
+      }
+
+      .final-statement p {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="top-bar">
+      <div class="title-area">
+        <div class="small-label">Zine</div>
+        <h1>Interactive Magazine</h1>
+        <nav class="page-nav">
+          <a href="index.html">home</a>
+          <a href="topic.html">topic</a>
+          <a href="forum.html">the forum</a>
+          <a href="offline.html">offline events</a>
+          <a href="case.html">censorship cases</a>
+          <a href="about.html">about us</a>
+        </nav>
+      </div>
+
+      <div class="controls">
+        <button id="prevBtn">← Prev</button>
+        <div class="indicator" id="pageIndicator">1 / 2</div>
+        <button id="nextBtn">Next →</button>
+      </div>
+    </div>
+
+    <div class="book-stage">
+      <div class="book" id="book">
+        <div class="page-side left" id="leftSide">
+          <img id="leftPage" src="" alt="Left page" />
+          <div class="empty-page" id="leftEmpty">Empty</div>
+        </div>
+
+        <div class="page-side right" id="rightSide">
+          <img id="rightPage" src="" alt="Right page" />
+          <div class="empty-page" id="rightEmpty">Empty</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint">
+      Click the left or right side to turn pages. You can also use the keyboard arrow keys.
+    </div>
+
+    <p class="zine-caption">
+      A visual journal about women’s health posts silenced by algorithms
+    </p>
+
+    <section class="content-section">
+      <div class="section-label">Why is it called the "Silent Flock"?</div>
+
+      <p>
+        "Sheep" are often seen as a submissive, controllable, and easily driven group in cultural imagery.
+        In our context, the “herd” refers to those posts, content, and voices discussing women’s health topics
+        which are controlled, restricted, or even deleted by platform algorithms.
+      </p>
+
+      <p>
+        At the same time, the shape of the ovaries bears a striking visual resemblance to a sheep's head
+        (see the "topic" section of the website for details). This biological coincidence makes "sheep" a symbol
+        that is not random but has a metaphorical meaning for the body.
+      </p>
+
+      <p>
+        And "silence" is not because there is nothing to say, but because the words are hidden.
+      </p>
+    </section>
+
+    <section class="quote-block">
+      <p class="quote-title">As we show in the "cases" section of the website:</p>
+      <ul>
+        <li>Over 90% of survey participants have seen women’s health content removed or hidden (n=59, 2026);</li>
+        <li>Vaginal health (78%) and sex education (76%) are the two most restricted topics;</li>
+        <li>On platforms such as Xiaohongshu, words such as "PCOS" and "vagina" are often abbreviated or replaced, while men’s health content is not subject to the same restrictions.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <div class="section-label">We are not comparing women to animals</div>
+
+      <p>
+        This must be made clear. We’re not saying “women are like sheep.”
+        Our metaphor is: posts about women’s health are controlled, excluded, and silenced like sheep driven by algorithms.
+      </p>
+
+      <p>
+        The "sheep breaking free" movement on the cover and inside pages of the magazine is not about submission, but about resistance.
+        They try to break out of the frame — just like many female users who still insist on sharing after being restricted
+        (such as the blogger in the case who was restricted three times but continued to share her PCOS pregnancy experience).
+      </p>
+    </section>
+
+    <section class="content-section">
+      <div class="section-label">Why make a magazine instead of just one more post?</div>
+
+      <p>
+        Because we realize that topics restricted by algorithms often need to be spread through another medium.
+      </p>
+
+      <p>
+        The form of paper or digital zine is naturally artistic, storable, and algorithmic.
+        It does not rely on recommendation systems, is not filtered by keywords, and does not rely on the number of likes to survive.
+      </p>
+
+      <p>
+        We hope to use this quieter, more powerful, and less hijacked way by algorithms to let more people see:
+      </p>
+      <p>Women's health information is not "sensitive content" but "basic health rights."</p>
+    </section>
+
+  </div>
+
+  <script>
+    const pages = [
+      "pages/page-01.jpg",
+      "pages/page-02.jpg",
+      "pages/page-03.jpg",
+      "pages/page-04.jpg",
+      "pages/page-05.jpg",
+      "pages/page-06.jpg",
+      "pages/page-07.jpg",
+      "pages/page-08.jpg",
+      "pages/page-09.jpg",
+      "pages/page-10.jpg",
+      "pages/page-11.jpg",
+      "pages/page-12.jpg",
+      "pages/page-13.jpg",
+      "pages/page-14.jpg",
+      "pages/page-15.jpg",
+      "pages/page-16.jpg",
+      "pages/page-17.jpg",
+      "pages/page-18.jpg",
+      "pages/page-19.jpg",
+      "pages/page-20.jpg",
+      "pages/page-21.jpg",
+      "pages/page-22.jpg",
+      "pages/page-23.jpg",
+      "pages/page-24.jpg"
+    ];
+
+    let currentSpread = 0;
+
+    const leftPage = document.getElementById("leftPage");
+    const rightPage = document.getElementById("rightPage");
+    const leftEmpty = document.getElementById("leftEmpty");
+    const rightEmpty = document.getElementById("rightEmpty");
+    const pageIndicator = document.getElementById("pageIndicator");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const leftSide = document.getElementById("leftSide");
+    const rightSide = document.getElementById("rightSide");
+
+    function renderSpread() {
+      const leftIndex = currentSpread * 2;
+      const rightIndex = leftIndex + 1;
+
+      const leftSrc = pages[leftIndex];
+      const rightSrc = pages[rightIndex];
+
+      if (leftSrc) {
+        leftPage.src = leftSrc;
+        leftPage.style.display = "block";
+        leftEmpty.style.display = "none";
+      } else {
+        leftPage.removeAttribute("src");
+        leftPage.style.display = "none";
+        leftEmpty.style.display = "flex";
+      }
+
+      if (rightSrc) {
+        rightPage.src = rightSrc;
+        rightPage.style.display = "block";
+        rightEmpty.style.display = "none";
+      } else {
+        rightPage.removeAttribute("src");
+        rightPage.style.display = "none";
+        rightEmpty.style.display = "flex";
+      }
+
+      if (window.innerWidth <= 900) {
+        const mobileIndex = currentSpread;
+        const mobileSrc = pages[mobileIndex];
+        rightPage.src = mobileSrc || "";
+        rightPage.style.display = mobileSrc ? "block" : "none";
+        rightEmpty.style.display = mobileSrc ? "none" : "flex";
+        pageIndicator.textContent = mobileSrc ? `${mobileIndex + 1} / ${pages.length}` : "";
+        prevBtn.disabled = mobileIndex === 0;
+        nextBtn.disabled = mobileIndex >= pages.length - 1;
+      } else {
+        const leftNum = leftSrc ? leftIndex + 1 : "";
+        const rightNum = rightSrc ? rightIndex + 1 : "";
+        pageIndicator.textContent = rightNum ? `${leftNum} / ${rightNum}` : `${leftNum}`;
+        prevBtn.disabled = currentSpread === 0;
+        nextBtn.disabled = leftIndex + 2 >= pages.length;
+      }
+    }
+
+    function nextSpread() {
+      if (window.innerWidth <= 900) {
+        if (currentSpread < pages.length - 1) {
+          currentSpread += 1;
+          renderSpread();
+        }
+      } else {
+        if ((currentSpread + 1) * 2 < pages.length) {
+          currentSpread += 1;
+          renderSpread();
+        }
+      }
+    }
+
+    function prevSpread() {
+      if (currentSpread > 0) {
+        currentSpread -= 1;
+        renderSpread();
+      }
+    }
+
+    prevBtn.addEventListener("click", prevSpread);
+    nextBtn.addEventListener("click", nextSpread);
+
+    leftSide.addEventListener("click", prevSpread);
+    rightSide.addEventListener("click", nextSpread);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") prevSpread();
+      if (e.key === "ArrowRight") nextSpread();
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth <= 900 && currentSpread > pages.length - 1) {
+        currentSpread = pages.length - 1;
+      }
+      renderSpread();
+    });
+
+    renderSpread();
+  </script>
+</body>
+</html>

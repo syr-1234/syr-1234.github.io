@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Silenced Flock — Evidence Forum</title>
+   <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+  --red: #8f1118;
+  --red-deep: #5e0b10;
+  --paper: #8f1118;
+  --black: #f5efe9;
+  --soft-line: rgba(245,239,233,0.16);
+  --soft-shadow: 0 24px 60px rgba(0,0,0,0.22);
+ }
+ h1, .hero-title {
+  color: #ffffff !important;
+}
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+  margin: 0;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background: #e30707;
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .grain,
+    .scan-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .grain {
+      opacity: 0.06;
+      background-image:
+        radial-gradient(circle at 15% 25%, #000 0.5px, transparent 0.8px),
+        radial-gradient(circle at 80% 30%, #000 0.6px, transparent 0.8px),
+        radial-gradient(circle at 45% 80%, #000 0.5px, transparent 0.8px);
+      background-size: 12px 12px;
+    }
+
+    .scan-overlay {
+      opacity: 0.04;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.8),
+        rgba(0,0,0,0.8) 1px,
+        transparent 1px,
+        transparent 8px
+      );
+    }
+
+    .page-shell {
+      position: relative;
+      z-index: 3;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 26px;
+      background: rgba(94,11,16,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .logo-slot {
+      width: 220px;
+      min-height: 58px;
+      border: 1.4px solid rgba(245,239,233,0.28);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(0,0,0,0.08);
+    }
+
+    .logo-slot small {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .logo-slot strong {
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .top-nav {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      color: #fff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+
+    .top-nav a {
+      position: relative;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .top-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 100%;
+      height: 1px;
+      background: #fff;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.22s ease;
+    }
+
+    .top-nav a:hover {
+      transform: translateY(-2px);
+      opacity: 0.86;
+    }
+
+    .top-nav a:hover::after { transform: scaleX(1); }
+
+    .forum-hero {
+      padding: 24px;
+      min-height: calc(100vh - 95px);
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-board {
+      position: relative;
+      width: min(1400px, 100%);
+      min-height: 84vh;
+      background: var(--paper);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--soft-shadow);
+      isolation: isolate;
+    }
+
+    .hero-band-top,
+    .hero-band-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 82px;
+      background: var(--red);
+      z-index: 1;
+    }
+
+    .hero-band-top { top: 0; }
+    .hero-band-bottom { bottom: 0; }
+
+    .hero-rotating-strip {
+      position: absolute;
+      top: 160px;
+      right: -140px;
+      width: 520px;
+      height: 70px;
+      transform: rotate(-18deg);
+      background: var(--black);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      padding-inline: 28px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      animation: driftStrip 7s ease-in-out infinite;
+      z-index: 1;
+      opacity: 0.96;
+    }
+
+    @keyframes driftStrip {
+      0%, 100% { transform: rotate(-18deg) translateX(0); }
+      50% { transform: rotate(-18deg) translateX(-26px); }
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      min-height: 84vh;
+    }
+
+    .hero-left {
+      padding: 110px 40px 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-right {
+      position: relative;
+      border-left: 1px solid var(--soft-line);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(217,10,10,0.12), rgba(0,0,0,0.03));
+    }
+
+    .hero-topline {
+      position: absolute;
+      top: 28px;
+      left: 34px;
+      right: 34px;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .hero-kicker {
+      margin: 0 0 18px;
+      color: rgba(12,12,12,0.52);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .hero-left h1 {
+      margin: 0;
+      color: var(--red);
+      font-size: clamp(4.4rem, 11vw, 9rem);
+      line-height: 0.88;
+      letter-spacing: -0.07em;
+      font-weight: 900;
+      text-transform: uppercase;
+      transition: transform 0.35s ease;
+    }
+
+    .hero-left h1:hover { transform: scale(1.03); }
+
+    .hero-desc {
+      max-width: 760px;
+      margin: 22px 0 0;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(12,12,12,0.78);
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .hero-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(245,239,233,0.22);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: rgba(94,11,16,0.7);
+  color: #f5efe9;
+}
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .hero-btn {
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      font-weight: 700;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    .hero-btn.dark {
+  background: rgba(94,11,16,0.85);
+  color: #f5efe9;
+  border: 1px solid rgba(245,239,233,0.24);
+}
+
+.hero-btn.red {
+  background: transparent;
+  color: #f5efe9;
+  border: 1px solid rgba(245,239,233,0.24);
+}
+
+    .hero-note {
+      position: absolute;
+      bottom: 28px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      color: #fff;
+      z-index: 4;
+    }
+
+    .hero-note.left { left: 34px; }
+    .hero-note.right { right: 34px; text-align: right; }
+
+    .visual-stack {
+      position: absolute;
+      inset: 0;
+    }
+
+    .visual-card {
+      position: absolute;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(12,12,12,0.08);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+
+    .visual-card.main {
+      top: 90px;
+      left: 38px;
+      right: 38px;
+      height: 54%;
+      background: linear-gradient(145deg, rgba(217,10,10,0.95), rgba(164,0,0,0.92));
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+
+    .visual-card.secondary {
+  left: 68px;
+  right: 88px;
+  bottom: 80px;
+  height: 24%;
+  background: rgba(120, 15, 21, 0.92);
+  animation: cardFloat 7.4s ease-in-out infinite reverse;
+  border: 1px solid rgba(245,239,233,0.12);
+}
+
+    .visual-card.black {
+  width: 40%;
+  height: 28%;
+  right: 20px;
+  bottom: 22px;
+  background: rgba(0,0,0,0.45);
+  color: #f5efe9;
+  animation: cardFloat 6.8s ease-in-out infinite;
+}
+
+    @keyframes cardFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .main-grid-lines {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mix-blend-mode: screen;
+    }
+
+    .main-copy {
+      position: absolute;
+      left: 28px;
+      bottom: 26px;
+      right: 28px;
+      color: #fff;
+    }
+
+    .main-copy p {
+      margin: 0 0 8px;
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      opacity: 0.84;
+    }
+
+    .main-copy h3 {
+      margin: 0;
+      font-size: clamp(2rem, 4.4vw, 3.4rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+    }
+
+    .secondary-content {
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .secondary-content div {
+      padding: 18px;
+      border-right: 1px solid var(--soft-line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .secondary-content div:last-child { border-right: 0; }
+
+    .secondary-content strong,
+    .black-card-copy strong {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .secondary-content span {
+      color: var(--red);
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      line-height: 1.1;
+      font-weight: 800;
+    }
+
+    .black-card-copy {
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .black-card-copy p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.45;
+      max-width: 220px;
+    }
+
+    .ticker-wrap {
+  background: rgba(94, 11, 16, 0.92);
+  overflow: hidden;
+  border-top: 1px solid rgba(245,239,233,0.14);
+  border-bottom: 1px solid rgba(245,239,233,0.14);
+  position: relative;
+  z-index: 3;
+}
+
+    .ticker-track {
+  display: inline-flex;
+  gap: 54px;
+  align-items: center;
+  min-width: max-content;
+  white-space: nowrap;
+  color: rgba(245,239,233,0.92);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 13px;
+  padding: 16px 0;
+  animation: tickerMove 24s linear infinite;
+}
+
+    .ticker-track span::after {
+      content: "•";
+      margin-left: 54px;
+      color: var(--red);
+    }
+
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .forum-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      padding: 28px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 98px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .sidebar-panel,
+.forum-group,
+.submit-panel {
+  background: rgba(120, 15, 21, 0.88);
+  border-radius: 24px;
+  box-shadow: var(--soft-shadow);
+  border: 1px solid rgba(245,239,233,0.12);
+}
+
+    .sidebar-panel {
+      padding: 20px;
+    }
+
+    .sidebar-panel p {
+      margin: 0 0 14px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: var(--red);
+    }
+
+    .sidebar-panel a {
+      display: block;
+      padding: 11px 0;
+      border-top: 1px solid var(--soft-line);
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.22s ease, transform 0.22s ease;
+    }
+
+    .sidebar-panel a:first-of-type { border-top: 0; }
+
+    .sidebar-panel a:hover {
+      color: var(--red);
+      transform: translateX(6px);
+    }
+
+    .count-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-top: 1px solid var(--soft-line);
+      font-size: 13px;
+    }
+
+    .count-row strong {
+      color: var(--red);
+      font-size: 18px;
+    }
+
+    .forum-content {
+      display: grid;
+      gap: 24px;
+    }
+
+    .section-intro {
+  background: rgba(120, 15, 21, 0.9);
+  color: #f5efe9;
+  padding: 22px 24px;
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 1px solid rgba(245,239,233,0.12);
+}
+
+    .section-intro h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  color: #f5efe9;
+}
+
+.section-intro p {
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.65;
+  color: rgba(245,239,233,0.82);
+}
+
+    .forum-group {
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    .group-head {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      border-bottom: 1px solid var(--soft-line);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+
+    .group-head b {
+      font-size: 12px;
+      color: var(--red);
+      letter-spacing: 0.24em;
+    }
+
+    .group-head h3 {
+      margin: 0;
+      color: #f5efe9;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .case-card {
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  background: rgba(255,255,255,0.04); 
+  backdrop-filter: blur(4px);
+
+  margin: 12px 0;
+  border-radius: 14px;
+
+  transition: all 0.25s ease;
+}
+.case-card:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+
+    .case-card:first-child { border-top: 0; }
+
+    .case-summary {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      padding: 20px 0 18px;
+      cursor: pointer;
+    }
+
+    .case-meta {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .case-summary h4 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  transition: color 0.2s ease;
+  color: #f5efe9;
+}
+
+    .case-summary:hover h4 {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255,255,255,0.3);
+}
+
+    .case-summary p {
+      margin: 12px 0 0;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      max-width: 900px;
+    }
+
+    .case-footer-line {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .open-state,
+.status-tag {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.open-state {
+  color: #f5efe9;
+}
+
+.status-tag {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(94,11,16,0.6);
+  color: #f5efe9;
+  border: 1px solid rgba(245,239,233,0.2);
+}
+
+    .case-detail {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s ease;
+    }
+
+    .case-detail-inner { overflow: hidden; }
+
+    .case-card.active .case-detail { grid-template-rows: 1fr; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      padding-bottom: 22px;
+    }
+
+    .evidence-preview,
+    .data-preview,
+    .quote-panel {
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .evidence-preview {
+  min-height: 300px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: flex-end;
+  padding: 22px;
+}
+
+    .evidence-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.05) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  pointer-events: none;
+}
+
+    .preview-label {
+      position: relative;
+      z-index: 2;
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .detail-text {
+  background: rgba(255,255,255,0.08); 
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15); 
+  backdrop-filter: blur(6px); 
+}
+
+.detail-text p {
+  margin: 0 0 12px;
+  line-height: 1.75;
+  color: #ffffff;
+}
+
+.detail-text strong { 
+  color: rgba(255,255,255,0.85);
+}
+
+    .bars-box {
+      min-height: 260px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(217,10,10,0.1), transparent);
+      border: 1px solid rgba(217,10,10,0.14);
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 16px;
+      padding: 26px;
+    }
+
+    .bar {
+      width: 48px;
+      border-radius: 16px 16px 0 0;
+      background: var(--red);
+      animation: riseBars 2.4s ease-in-out infinite;
+    }
+
+    .bar:nth-child(2) { animation-delay: 0.18s; }
+    .bar:nth-child(3) { animation-delay: 0.34s; }
+    .bar:nth-child(4) { animation-delay: 0.52s; }
+
+    @keyframes riseBars {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .statement-split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+    }
+
+    .red-statement,
+    .line-list {
+      border-radius: 24px;
+      min-height: 290px;
+      padding: 24px;
+    }
+
+    .red-statement {
+      background: var(--red);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .red-statement small {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      opacity: 0.76;
+    }
+
+    .red-statement h4 {
+      margin: 10px 0 14px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+    }
+
+    .red-statement p {
+      margin: 0;
+      line-height: 1.75;
+    }
+
+    .line-list {
+      background: linear-gradient(180deg, rgba(217,10,10,0.06), transparent);
+      border: 1px solid rgba(217,10,10,0.18);
+      display: grid;
+      align-content: center;
+    }
+
+    .line-list div {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--soft-line);
+      color: var(--red);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-size: 1.15rem;
+    }
+
+    .line-list div:last-child { border-bottom: 0; }
+
+    .quote-wall {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .quote-panel {
+      min-height: 190px;
+      background: var(--black);
+      color: #fff;
+      padding: 24px;
+      display: flex;
+      align-items: flex-end;
+      line-height: 1.48;
+      font-size: 1.12rem;
+      transition: transform 0.24s ease;
+    }
+
+    .quote-panel:hover { transform: translateY(-6px); }
+
+    .submit-panel {
+      padding: 28px;
+    }
+
+    .submit-head p {
+      margin: 0;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: rgba(245,239,233,0.62);
+    }
+
+    .submit-head h3 {
+      margin: 10px 0 0;
+      color: var(--red);
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+    }
+
+    .submit-head .sub-note {
+      margin-top: 14px;
+      color: rgba(245,239,233,0.82);
+      line-height: 1.7;
+      max-width: 900px;
+    }
+
+    .submit-form {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--soft-line);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: rgba(245,239,233,0.62);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid rgba(12,12,12,0.14);
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.8);
+      outline: none;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217,10,10,0.08);
+      transform: translateY(-1px);
+    }
+
+    .submit-row {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .checkline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .submit-btn {
+      min-height: 50px;
+      padding: 0 24px;
+      border-radius: 999px;
+      border: 0;
+      background: var(--black);
+      color: #fff;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .detail-grid,
+      .statement-split,
+      .quote-wall,
+      .forum-layout { grid-template-columns: 1fr; }
+
+      .sidebar { position: static; }
+      .hero-right { min-height: 460px; border-left: 0; border-top: 1px solid var(--soft-line); }
+      .hero-note.right { right: 24px; }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .top-nav {
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .forum-hero,
+      .forum-layout { padding: 16px; }
+
+      .hero-left { padding: 96px 22px 110px; }
+      .hero-topline,
+      .hero-note { font-size: 9px; }
+      .hero-topline {
+        left: 20px;
+        right: 20px;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .hero-note.left { left: 20px; }
+      .hero-note.right { right: 20px; }
+
+      .visual-card.main { left: 20px; right: 20px; top: 72px; }
+      .visual-card.secondary { left: 34px; right: 44px; }
+      .hero-rotating-strip { width: 420px; right: -160px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .forum-group,
+      .submit-panel,
+      .sidebar-panel { padding: 20px; }
+    }
+  /* new simple forum header */
+.forum-simple-header {
+  width: 100%;
+  background: #e10600;
+  color: #ffffff;
+  padding: 55px 60px 0 60px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 20;
+}
+
+.forum-simple-title {
+  margin: 0;
+  font-size: clamp(5.5rem, 9vw, 8rem);
+  line-height: 0.9;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.forum-simple-nav {
+  display: flex;
+  gap: 42px;
+  margin-top: 34px;
+  flex-wrap: wrap;
+}
+
+.forum-simple-nav a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.forum-simple-line {
+  margin-top: 55px;
+  margin-left: -60px;
+  width: calc(100% + 120px);
+  border-top: 1px solid rgba(255,255,255,0.45);
+}
+ 
+ .sidebar-panel > p {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+ </style>
+</head>
+<body>
+    
+    
+
+  
+  <div class="grain"></div>
+  <div class="scan-overlay"></div>
+
+  <div class="page-shell">
+    <header class="site-header">
+  <div class="logo-slot">
+    <small>censorship cases</small>
+    <strong>the silenced flock</strong>
+  </div>
+
+  <nav class="top-nav">
+    <a href="index.html">home</a>
+    <a href="zine.html">zine</a>
+    <a href="topic.html">topic</a>
+    <a href="offline.html">offline events</a>
+    <a href="case.html">censorship cases</a>
+    <a href="about.html">about us</a>
+  </nav>
+</header>
+
+
+    <main>
+      <section id="forum-hero" class="forum-hero">
+        <div class="hero-board">
+          <div class="hero-band-top"></div>
+          <div class="hero-band-bottom"></div>
+          <div class="hero-rotating-strip">
+            <span>deleted</span>
+            <span>hidden</span>
+            <span>shadowbanned</span>
+            <span>suppressed</span>
+          </div>
+
+          <div class="hero-topline">
+            <span>archive / testimony / platform bias</span>
+            <span>make everyone know</span>
+          </div>
+
+          <div class="hero-grid">
+            <div class="hero-left">
+              <p class="hero-kicker">stories removed · terms suppressed · voices hidden · evidence preserved</p>
+              <h1>evidence<br>forum</h1>
+              <p class="hero-desc">
+                This is not a normal social feed. It is a discussion and evidence archive designed to collect,
+                display, and preserve cases where women's health content is removed, hidden, limited, or treated unfairly across platforms.
+              </p>
+
+              <div class="hero-tags">
+                <span>exhibit</span>
+                <span>dialogue</span>
+                <span>Reflection</span>
+              </div>
+
+              <div class="hero-actions">
+                <a class="hero-btn dark" href="#forum-archive">browse cases</a>
+                <a class="hero-btn red" href="#submit-evidence">submit evidence</a>
+              </div>
+            </div>
+
+            <div class="hero-right">
+              <div class="visual-stack">
+                <div class="visual-card main">
+                  <div class="main-grid-lines"></div>
+                  <div class="main-copy">
+                    <p>featured evidence board</p>
+                    <h3>not just a forum.<br>also a testimony archive.</h3>
+                  </div>
+                </div>
+
+                <div class="visual-card secondary">
+                  <div class="secondary-content">
+                    <div>
+                      <strong>live category</strong>
+                      <span>deleted posts</span>
+                    </div>
+                    <div>
+                      <strong>visible action</strong>
+                      <span>show the truth</span>
+                    </div>
+                    <div>
+                      <strong>future structure</strong>
+                      <span>everyone can</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="visual-card black">
+                  <div class="black-card-copy">
+                    <strong>anonymous note</strong>
+                    <p>“using direct medical terms made the post vanish overnight.”</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-note left">scroll / open / expand / trace</div>
+          <div class="hero-note right">not a health encyclopedia — an evidence record</div>
+        </div>
+      </section>
+
+      <section class="ticker-wrap" aria-label="latest evidence titles">
+        <div class="ticker-track">
+          <span>post removed after using the term uterus directly</span>
+          <span>pcos video flagged as sensitive after educational explanation</span>
+          <span>endometriosis story lost reach within hours of posting</span>
+          <span>anonymous report describes repeated hiding of comments</span>
+          <span>search visibility dropped after clinical keywords were used</span>
+          <span>post removed after using the term uterus directly</span>
+          <span>pcos video flagged as sensitive after educational explanation</span>
+          <span>endometriosis story lost reach within hours of posting</span>
+        </div>
+      </section>
+
+      <section id="forum-archive" class="forum-layout">
+        <aside class="sidebar reveal">
+          <div class="sidebar-panel">
+            <p>forum index</p>
+            <a href="#deleted-posts">deleted posts</a>
+            <a href="#shadow-ban">shadow ban</a>
+            <a href="#pcos-cases">pcos</a>
+            <a href="#endo-cases">endometriosis</a>
+            <a href="#anonymous-stories">anonymous stories</a>
+            <a href="#submit-evidence">submit evidence</a>
+          </div>
+
+          <div class="sidebar-panel">
+            <p>archive counts</p>
+            <div class="count-row"><span>visible cases</span><strong>18</strong></div>
+            <div class="count-row"><span>hidden / removed</span><strong>09</strong></div>
+            <div class="count-row"><span>shadowban claims</span><strong>05</strong></div>
+            <div class="count-row"><span>anonymous posts</span><strong>07</strong></div>
+          </div>
+        </aside>
+
+        <div class="forum-content">
+          <section class="section-intro reveal">
+            <h2>case archive</h2>
+            <p>
+              You can view various cases on the left side or in card format.
+            </p>
+          </section>
+
+          <section id="deleted-posts" class="forum-group reveal">
+            <div class="group-head">
+              <b>01</b>
+              <h3>deleted posts</h3>
+            </div>
+
+            <div class="cards-grid">
+  <p>No deleted-post cases uploaded yet.</p>
+</div>
+</div>
+          </section>
+
+          <section id="shadow-ban" class="forum-group reveal">
+            <div class="group-head">
+              <b>02</b>
+              <h3>shadow ban</h3>
+            </div>
+
+              <div class="cards-grid">
+    <p>No shadow-ban or visibility-drop cases uploaded yet.</p>
+  </div>
+</section>
+
+              <div class="case-detail">
+                <div class="case-detail-inner">
+                  <div class="detail-grid">
+                    <div class="detail-text">
+                      <p><strong>Pattern:</strong> Content not formally deleted, but visibility appears sharply reduced.</p>
+                      <p><strong>Forum logic:</strong> This section can later be database-driven while keeping the same visual card structure.</p>
+                      <p><strong>Why the style matters:</strong> It should feel like an evidence archive, not a casual social feed.</p>
+                    </div>
+                    <div class="bars-box">
+                      <div class="bar" style="height:180px"></div>
+                      <div class="bar" style="height:132px"></div>
+                      <div class="bar" style="height:90px"></div>
+                      <div class="bar" style="height:54px"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section id="pcos-cases" class="forum-group reveal">
+            <div class="group-head">
+              <b>03</b>
+              <h3>pcos</h3>
+            </div>
+
+            <div class="cards-grid">
+  <p>No PCOS-related cases uploaded yet.</p>
+</div>
+          </section>
+
+      <section id="endo-cases" class="forum-group reveal">
+  <div class="group-head">
+    <b>04</b>
+    <h3>endometriosis</h3>
+  </div>
+
+  <div class="cards-grid">
+    <p>No endometriosis-related cases uploaded yet.</p>
+  </div>
+</section>    
+          
+          
+          <section id="anonymous-stories" class="forum-group reveal">
+            <div class="group-head">
+              <b>05</b>
+              <h3>anonymous stories</h3>
+            </div>
+
+          
+
+  <div class="cards-grid">
+    <p>No anonymous stories uploaded yet.</p>
+  </div>
+</section>
+          </section>
+
+          <section id="submit-evidence" class="submit-panel reveal">
+            <div class="submit-head">
+              <p>Speak freely</p>
+              <h3>submit evidence</h3>
+              <p class="sub-note">
+                You can find the posts you want to expose by using these card categories and content.
+              </p>
+            </div>
+
+            <p class="sub-note" style="margin-top:1rem;"><strong>Archived version.</strong> This copy of the site is kept as a portfolio record, so new submissions are closed.</p>
+            <form class="submit-form" action="#" data-archived>
+              <div class="form-grid">
+                <label class="field">
+                  <span>case title</span>
+                  <input type="text" name="title" placeholder="Enter a case title" />
+                </label>
+
+                <label class="field">
+                  <span>platform</span>
+                  <select name="platform">
+                    <option>Instagram</option>
+                    <option>TikTok</option>
+                    <option>Xiaohongshu</option>
+                    <option>YouTube</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>health topic</span>
+                  <select name="health_topic">
+                    <option>PCOS</option>
+                    <option>Endometriosis</option>
+                    <option>Menstrual Health</option>
+                    <option>Fertility</option>
+                    <option>Sexual Health</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>moderation type</span>
+                  <select name="moderation_type">
+                    <option>Deleted</option>
+                    <option>Hidden</option>
+                    <option>Shadow Ban</option>
+                    <option>Flagged</option>
+                    <option>Reduced Reach</option>
+                  </select>
+                </label>
+
+                <label class="field full">
+                  <span>summary / description</span>
+                  <textarea name="content" rows="6" placeholder="Describe what happened and why the case matters."></textarea>
+                </label>
+
+                <label class="field">
+                  <span>screenshot / evidence image</span>
+                  <input type="file" name="evidence_image" />
+                </label>
+
+                <label class="field">
+                  <span>display name</span>
+                  <input type="text" name="author_name" placeholder="Anonymous or your name" />
+                </label>
+              </div>
+
+              <div class="submit-row">
+                <label class="checkline"><input type="checkbox" name="anonymous" /> <span>submit anonymously</span></label>
+                <button class="submit-btn" type="submit">send to archive</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.case-card');
+    cards.forEach(card => {
+      const button = card.querySelector('.case-summary');
+      button.addEventListener('click', () => {
+        card.classList.toggle('active');
+      });
+    });
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    document.querySelectorAll('.sidebar a, .top-nav a[href^="#"], .hero-btn[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const targetId = link.getAttribute('href');
+        if (targetId && targetId.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(targetId);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+<script>
+document.querySelectorAll('form[data-archived]').forEach(function (f) {
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var b = f.querySelector('[type=submit], button:not([type=button])');
+    if (b) { b.textContent = 'Submissions closed'; b.disabled = true; }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,850 @@
+/* 基础配置 */
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: sans-serif; overflow-x: hidden; }
+
+/* 第一页容器 */
+.hero-container {
+    height: 100vh;
+    background-color: #e30707;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    aspect-ratio: 16/9;
+    background: white;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 轮播图控制 */
+.slideshow-overlay { position: absolute; inset: 0; }
+/* 修改后的图片容器样式 */
+.image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* 默认隐藏 */
+    /* 关键：删掉这里的 transition: opacity ... 这一行 */
+}
+
+.image-container.active {
+    opacity: 1; /* 激活时瞬间显示 */
+}
+
+.image-container.active { opacity: 1; }
+.image-container img { width: 100%; height: 100%; object-fit: cover; }
+.dark-mask { position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 1; }
+
+/* 核心镂空文字样式 */
+.clipped-text {
+  position: relative;
+  z-index: 10;
+  font-size: clamp(2rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 0.9;
+  text-align: center;
+  cursor: pointer;
+  color: red;
+
+
+  transition: transform 0.3s;
+}
+
+.clipped-text:hover {
+  transform: scale(1.05);
+}
+
+/* 导航样式 */
+.bottom-nav {
+    position: absolute; bottom: 20px; width: 90%;
+    display: flex; justify-content: space-between;
+    font-size: 10px; text-transform: uppercase; color: rgba(255,255,255,0.8);
+    z-index: 20; letter-spacing: 2px;
+}
+
+/* 第二页样式 */
+.content-container { background: white; min-height: 100vh; }
+.top-sub-nav {
+    display: flex; justify-content: space-between; padding: 20px 40px;
+    color: #db0b0b; font-size: 12px; text-transform: uppercase;
+}
+
+.service-list { text-align: center; color: #de1d1d; padding: 60px 20px; }
+.service-list h2 { font-size: 2rem; margin-bottom: 30px; }
+.service-list p { font-size: 2.5rem; font-weight: bold; margin: 5px 0; }
+.arrow-down { font-size: 30px; margin-top: 40px; animation: bounce 2s infinite; }
+
+/* 底部红色区域 */
+.footer-red { background: #da0505; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+.black-oval {
+    width: 90%; max-width: 800px; aspect-ratio: 3/1;
+    background: black; border-radius: 50%; margin-bottom: 40px;
+}
+.contact-info { color: black; text-align: center; }
+.info-group { margin-bottom: 20px; }
+.info-group strong { display: block; text-transform: uppercase; font-size: 12px; opacity: 0.7; }
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+/* 针对这些文字，只添加颜色和缩放的过渡，不改变其布局属性 */
+.top-sub-nav span, 
+.service-list p, 
+.service-list h2,
+.service-list .dots,
+.service-list .tagline,
+.arrow-down {
+    transition: color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    /* 移除之前的 display: inline-block; 
+       保持它们原本的 display 属性（p 是 block，span 是 inline） */
+}
+
+/* 悬停效果 */
+.top-sub-nav span:hover, 
+.service-list p:hover, 
+.service-list .dots:hover,
+.service-list .tagline:hover,
+.arrow-down:hover {
+    color: #000000; /* 变黑 */
+    transform: scale(1.05); /* 稍微放大，1.05 比 1.1 更稳，不容易挤到别的字 */
+    transform-origin: center; /* 确保从中心放大，不位移 */
+}
+
+/* 如果你的 p 标签在放大时还是会抖动，可以加上这一行 */
+.service-list p {
+    width: fit-content; /* 让容器宽度刚好包裹文字，防止缩放时影响整行高度 */
+    margin-left: auto;
+    margin-right: auto; /* 保持居中（如果你原来是居中的话） */
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.bottom-nav,
+.page-nav,
+.top-sub-nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.bottom-nav a,
+.page-nav a,
+.top-sub-nav a {
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.bottom-nav a:hover,
+.page-nav a:hover,
+.top-sub-nav a:hover {
+    opacity: 0.7;
+}
+
+.subpage {
+    background: #db0b0b;
+    color: rgb(255, 255, 255);
+    min-height: 100vh;
+}
+
+.page-header {
+    padding: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    max-width: 1200px;
+    margin: 0 auto;   /* 让整个头部区域居中 */
+}
+
+.page-header h1 {
+    margin: 0 0 20px 0;
+    font-size: 48px;
+}
+
+.page-content {
+    padding: 40px 30px;
+    max-width: 900px;
+    margin: 0 auto;   /* 关键：正文区域水平居中 */
+}
+
+.page-content section {
+    margin-bottom: 40px;
+}
+
+.page-content h2 {
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.page-content p {
+    font-size: 18px;
+    line-height: 1.7;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+.hero-container {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+.title-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+}
+
+#mainTitle {
+    margin: 0;
+    text-align: center;
+}
+
+#mainTitle span {
+    display: block;
+}
+/* cases page */
+.cases-page {
+    background: #e10600;
+    color: white;
+    min-height: 100vh;
+}
+
+.cases-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    box-sizing: border-box;
+}
+
+.cases-intro {
+    max-width: 920px;
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+    color: white;
+}
+
+.cases-section {
+    margin-bottom: 56px;
+}
+
+.cases-section h2 {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 0 0 24px 0;
+    line-height: 1.2;
+    color: white;
+}
+
+.section-label {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+    color: white;
+}
+
+.case-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 28px;
+    box-sizing: border-box;
+}
+
+.case-card h3 {
+    margin: 0 0 14px 0;
+    font-size: 26px;
+    line-height: 1.3;
+    font-weight: 700;
+    color: white;
+}
+
+.case-card p {
+    margin: 0 0 14px 0;
+    font-size: 18px;
+    line-height: 1.85;
+    color: white;
+}
+
+.case-card ul {
+    margin: 0 0 14px 0;
+    padding-left: 24px;
+}
+
+.case-card li {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1.8;
+    color: white;
+}
+
+.source-note {
+    font-size: 16px;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+.case-links {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    word-break: break-word;
+}
+
+.case-links p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: white;
+}
+
+.case-links a {
+    color: white;
+    text-decoration: underline;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.case-links a:hover {
+    opacity: 0.75;
+}
+
+.cases-highlight {
+    background: transparent;
+    color: white;
+    border-radius: 0;
+    padding: 0;
+    margin-top: 24px;
+}
+
+.cases-highlight p {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.8;
+    font-weight: 600;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .cases-content {
+        padding: 36px 20px 60px;
+    }
+
+    .cases-section h2 {
+        font-size: 32px;
+    }
+
+    .case-card h3 {
+        font-size: 22px;
+    }
+
+    .cases-intro,
+    .case-card p,
+    .case-card li {
+        font-size: 17px;
+    }
+
+    .cases-highlight p {
+        font-size: 19px;
+    }
+}
+
+/* ========== OFFLINE PAGE old ========== */
+
+.offline-page {
+    background: #d90404;
+    color: #ffffff;
+}
+
+.offline-header {
+    max-width: 1280px;
+    padding: 28px 30px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+
+.offline-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.offline-logo {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.offline-nav a {
+    color: #ffffff;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.offline-nav a.active {
+    opacity: 1;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+.offline-heading-block {
+    margin-top: 48px;
+    max-width: 900px;
+}
+
+.offline-label {
+    margin: 0 0 16px 0;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+}
+
+.offline-heading-block h1 {
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 6.8rem);
+    line-height: 0.95;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.offline-subtitle {
+    max-width: 700px;
+    margin-top: 22px;
+    font-size: 19px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.9);
+}
+
+.offline-content {
+    max-width: 1280px;
+    padding: 40px 30px 100px;
+}
+
+.offline-showcase {
+    margin-bottom: 80px;
+}
+
+.offline-showcase-head {
+    margin-bottom: 24px;
+}
+
+.offline-showcase-head h2 {
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+.offline-scroll-gallery {
+    width: 100%;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+    padding: 24px 0;
+    position: relative;
+}
+
+.scroll-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: offlineScroll 35s linear infinite;
+}
+
+.offline-scroll-gallery:hover .scroll-track {
+    animation-play-state: paused;
+}
+
+.scroll-item {
+    flex: 0 0 auto;
+    width: 360px;
+    height: 260px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+}
+
+.scroll-item.large {
+    width: 520px;
+    height: 320px;
+}
+
+.scroll-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@keyframes offlineScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.offline-text-section,
+.offline-details,
+.offline-why,
+.offline-position {
+    margin-bottom: 80px;
+}
+
+.offline-two-col {
+    display: grid;
+    grid-template-columns: 0.9fr 1.3fr;
+    gap: 50px;
+    align-items: start;
+}
+
+.offline-kicker {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.72);
+}
+
+.offline-col-left h2 {
+    margin: 0;
+    font-size: 44px;
+    line-height: 1.05;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.offline-col-right p,
+.offline-position p,
+.offline-detail-text p {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+.offline-detail-card {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 28px;
+    padding: 28px 0;
+    border-top: 1px solid rgba(255,255,255,0.16);
+}
+
+.offline-detail-card:last-child {
+    border-bottom: 1px solid rgba(255,255,255,0.16);
+}
+
+.offline-number {
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(255,255,255,0.95);
+}
+
+.offline-detail-text h3 {
+    margin: 0 0 14px 0;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.offline-list {
+    margin: 0 0 18px 0;
+    padding-left: 22px;
+}
+
+.offline-list li {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #ffffff;
+}
+
+.offline-position {
+    border-top: 1px solid rgba(255,255,255,0.16);
+    padding-top: 40px;
+}
+
+.offline-quote-block {
+    margin-top: 34px;
+    display: grid;
+    gap: 18px;
+}
+
+.offline-quote {
+    margin: 0;
+    font-size: clamp(2rem, 4.7vw, 4.4rem);
+    font-weight: 900;
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: #ffffff;
+    max-width: 1000px;
+}
+
+@media (max-width: 980px) {
+    .offline-two-col {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .offline-col-left h2 {
+        font-size: 34px;
+    }
+
+    .scroll-item {
+        width: 300px;
+        height: 220px;
+    }
+
+    .scroll-item.large {
+        width: 420px;
+        height: 260px;
+    }
+}
+
+@media (max-width: 768px) {
+    .offline-header,
+    .offline-content {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .offline-heading-block {
+        margin-top: 34px;
+    }
+
+    .offline-heading-block h1 {
+        font-size: clamp(2.4rem, 14vw, 4.5rem);
+    }
+
+    .offline-subtitle,
+    .offline-col-right p,
+    .offline-position p,
+    .offline-detail-text p,
+    .offline-list li {
+        font-size: 16px;
+    }
+
+    .offline-detail-card {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .offline-number {
+        font-size: 24px;
+    }
+
+    .offline-detail-text h3 {
+        font-size: 22px;
+    }
+
+    .scroll-item {
+        width: 260px;
+        height: 190px;
+    }
+
+    .scroll-item.large {
+        width: 320px;
+        height: 210px;
+    }
+
+    .offline-quote {
+        font-size: clamp(1.7rem, 9vw, 3rem);
+        line-height: 1.02;
+    }
+}
+
+/* ========== OFFLINE PAGE new ========== */
+
+.offline-page {
+    background: #e10600;
+    color: #ffffff;
+}
+
+.offline-header {
+    max-width: 100%;
+    margin: 0;
+    padding: 40px 60px 0 60px;
+    border-bottom: none;
+    box-sizing: border-box;
+}
+
+.offline-topbar {
+    display: block;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 70px;
+    flex-wrap: wrap;
+}
+
+.offline-page-title {
+    margin: 0;
+font-size: clamp(8rem, 15vw, 13rem);  
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #ffffff;
+}
+
+.offline-nav {
+    display: flex;
+    gap: 40px;
+    margin-top: 25px;
+}
+
+.offline-nav a {
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.offline-nav a:hover {
+    opacity: 0.7;
+}
+
+.offline-divider {
+    width: calc(100% + 120px);
+    margin-left: -60px;
+    margin-top: 44px;
+    border-top: 1px solid rgba(255,255,255,0.45);
+}
+
+.offline-heading-block {
+    max-width: 1200px;
+    margin-top: 55px;
+    padding-bottom: 40px;
+}
+
+.offline-label {
+    margin: 0 0 26px 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.offline-hero-title {
+    margin: 0;
+    max-width: 1000px;
+
+    font-size: clamp(2.2rem, 4vw, 3.8rem); 
+    line-height: 1.1;
+
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+.offline-subtitle {
+    max-width: 1100px;
+    margin-top: 34px;
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: #ffffff;
+}
+
+.offline-content {
+    max-width: 100%;
+    padding: 0 60px 100px 60px;
+    box-sizing: border-box;
+}
+
+
+.offline-page-title {
+    font-size: clamp(5.5rem, 9vw, 8rem) !important;
+    line-height: 0.9;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+}
+
+/* ===== posters section ===== */
+
+.offline-posters {
+  padding: 80px 60px;
+}
+
+.offline-poster-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.poster-item {
+  overflow: hidden;
+  background: #000;
+}
+
+.poster-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.poster-item:hover img {
+  transform: scale(1.05);
+}
+
+
+/* poster section uses the same scrolling card style as product showcase */
+.poster-showcase .scroll-item {
+  width: 360px;
+  height: 260px;
+  flex: 0 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+}
+
+.poster-showcase .scroll-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
