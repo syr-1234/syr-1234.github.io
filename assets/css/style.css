@@ -306,3 +306,5 @@ figure.code pre {
   font: 0.9rem/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 figure.code figcaption { font-family: var(--display); font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
+.gallery.four { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
+@media (max-width: 860px) { .gallery.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
