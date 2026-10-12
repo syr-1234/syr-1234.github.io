@@ -312,3 +312,5 @@ blockquote.pull {
   margin: 2rem 0 0; padding: 0 0 0 1.25rem; border-left: 4px solid var(--ultra);
   font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2vw, 1.45rem); line-height: 1.45; max-width: 30em;
 }
+ul.refs { list-style: none; padding: 0; font-size: 0.98rem; line-height: 1.5; }
+ul.refs li { padding-left: 1.5em; text-indent: -1.5em; margin-bottom: 0.6em; }
