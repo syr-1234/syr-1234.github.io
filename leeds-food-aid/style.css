@@ -1,0 +1,404 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ffec40, #66b032);
+    color: #6a4e23;  
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased; /* Improve font rendering on webkit browsers */
+    -moz-osx-font-smoothing: grayscale; /* Improve font rendering on Firefox */
+}
+
+/* Container */
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    background-color: #6a4e23;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+}
+
+header .logo img {
+    max-width: 200px;  
+    height: auto;   
+    margin-bottom: 15px;
+}
+
+/* Navigation */
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin-top: 10px;
+}
+
+nav ul li {
+    margin: 0 15px;
+    position: relative; /* Necessary for positioning the dropdown */
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    text-decoration: underline;
+}
+
+/* Dropdown Menu Styles */
+nav ul li.dropdown .dropdown-menu {
+    visibility: hidden; /* Initially hidden */
+    opacity: 0;         /* Initially invisible */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #6a4e23;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    z-index: 1000; /* Ensure dropdown is above other elements */
+    transition: opacity 0.3s ease, visibility 0s ease 0.3s; /* Smooth fade-in effect */
+}
+
+nav ul li.dropdown .dropdown-menu.show {
+    visibility: visible; /* Make it visible */
+    opacity: 1;          /* Fade-in effect */
+    transition: opacity 0.3s ease;
+}
+
+/* Main Section */
+main {
+    padding: 40px 0;
+    background-color: white; 
+    border-radius: 10px;  
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+section h2 {
+    font-size: 2em;
+    color: #6a4e23;
+    margin-bottom: 10px;
+}
+
+section p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #333; 
+}
+
+/* Response Section Styles */
+#response {
+    background-color: #f9f9f9;
+    padding: 30px 20px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+#response h2 {
+    font-size: 2em;
+    color: #6a4e23;
+    margin-bottom: 15px;
+}
+
+#response p {
+    font-size: 1.2em;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Find More Button */
+#find-more-btn {
+    background-color: #ffec40;
+    color: #ff7f00;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    border: none;
+}
+
+#find-more-btn:hover {
+    background-color: #ff7f00;
+    color: white;
+}
+
+/* Find More Content */
+#find-more-content {
+    display: none;
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Diagram Section Styles */
+#diagram {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+#diagram img {
+    width: 100%;
+    max-width: 800px; /* Ensures image does not stretch too wide */
+    height: auto;
+    margin-top: 20px;
+}
+
+/* What is the Leeds Food Aid Network Section Styles */
+#contact {
+    background-color: #f9f9f9; /* Same light grey background as #response */
+    padding: 30px 20px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+#contact h2 {
+    font-size: 2em;
+    color: #6a4e23;
+    margin-bottom: 15px;
+}
+
+#contact p {
+    font-size: 1.2em;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Back to Top Button */
+#back-to-top {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #6a4e23; 
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; 
+}
+
+/* Footer */
+footer {
+    background-color: #6a4e23;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+footer h2 {
+    color: white;  /* Set color to white for "Leeds FAN supported by:" */
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+/* Support Logos Section */
+.support-logos {
+    display: grid;               
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 20px;               
+    justify-items: center;       
+    margin: 20px 0;
+}
+
+.support-logos img {
+    width: 100%;                
+    max-width: 150px;         
+    height: auto;     
+    object-fit: contain;     
+}
+
+/* Media Queries for Responsive Layout */
+@media (max-width: 768px) {
+    .support-logos {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+
+    #response {
+        padding: 20px;
+    }
+
+    #response h2 {
+        font-size: 1.8em;
+    }
+
+    #response p {
+        font-size: 1.1em;
+    }
+
+    #diagram h2 {
+        font-size: 1.8em;
+    }
+
+    #diagram p {
+        font-size: 1.2em;
+    }
+
+    #contact h2 {
+        font-size: 1.8em;
+    }
+
+    #contact p {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .support-logos {
+        grid-template-columns: 1fr;  
+    }
+
+    #response {
+        padding: 15px;
+    }
+
+    #response h2 {
+        font-size: 1.5em;
+    }
+
+    #response p {
+        font-size: 1em;
+    }
+
+    #diagram h2 {
+        font-size: 1.5em;
+    }
+
+    #diagram p {
+        font-size: 1.1em;
+    }
+
+    #contact h2 {
+        font-size: 1.5em;
+    }
+
+    #contact p {
+        font-size: 1em;
+    }
+}
+
+/* Pop-up Modal Styles */
+.popup {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.popup-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.close-btn {
+    font-size: 1.5em;
+    color: #333;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+/* Make the pop-up look good on mobile */
+@media (max-width: 768px) {
+    .popup-content {
+        width: 90%;
+    }
+}
+
+/* Add vendor prefixes to CSS3 properties for cross-browser support */
+@-webkit-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@-moz-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.popup {
+    -webkit-animation: fadeIn 0.5s ease-in-out;
+    -moz-animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Buttons for About Section */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.button-group .button {
+    background-color: #ffec40;  /* Yellow background */
+    color: #ff7f00;             /* Orange text */
+    border: 2px solid #ff7f00; /* Orange border */
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    width: calc(20% - 10px); /* Adjust width for buttons to fit */
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-group .button:hover {
+    background-color: #ff7f00; /* Darken background */
+    color: white;              /* Change text color to white */
+}
+
+@media (max-width: 768px) {
+    .button-group .button {
+        width: calc(45% - 10px); /* Adjust button size on medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .button-group .button {
+        width: 100%; /* Stack buttons on small screens */
+    }
+}
