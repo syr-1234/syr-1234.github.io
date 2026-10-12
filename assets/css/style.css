@@ -308,3 +308,7 @@ figure.code pre {
 figure.code figcaption { font-family: var(--display); font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
 .gallery.four { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
 @media (max-width: 860px) { .gallery.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+blockquote.pull {
+  margin: 2rem 0 0; padding: 0 0 0 1.25rem; border-left: 4px solid var(--ultra);
+  font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2vw, 1.45rem); line-height: 1.45; max-width: 30em;
+}
