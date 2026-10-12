@@ -316,3 +316,9 @@ ul.refs { list-style: none; padding: 0; font-size: 0.98rem; line-height: 1.5; }
 ul.refs li { padding-left: 1.5em; text-indent: -1.5em; margin-bottom: 0.6em; }
 .skill-h { font-family: var(--display); font-weight: 600; font-size: 1rem; color: var(--muted); margin: 1.25rem 0 0.5rem; }
 .skill-h:first-child { margin-top: 0; }
+/* Website breakdown: screenshot beside its explanation */
+.piece { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 1.25rem 1.75rem; align-items: start; margin-bottom: 2rem; }
+.piece h3 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin: 0 0 0.4rem; }
+.piece p { margin: 0; font-size: 1rem; }
+.cs-block .body .piece p { max-width: none; }
+@media (max-width: 860px) { .piece { grid-template-columns: 1fr; } }
