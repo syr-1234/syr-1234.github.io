@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Who gets paid for a stream | Yiran Sun</title>
-<meta name="description" content="A PHP and Chart.js visualisation of what streaming pays musicians.">
+<title>Plays for a minimum wage | Yiran Sun</title>
+<meta name="description" content="A PHP and Chart.js visualisation of how many plays a musician needs each month to earn a minimum wage.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232E2BFF'/%3E%3Crect x='6' y='13' width='20' height='6' fill='%23E2FF4A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
@@ -22,12 +22,28 @@
 <article class="wrap">
   <header class="cs-head">
     <a class="back" href="../index.html#work">Code and data</a>
-    <h1>Who gets paid for a stream</h1>
-    <p class="summary">For a data activism exercise, I put figures on musicians’ streaming royalties into a database and turned them into interactive charts, so that the economics of streaming would be easy for the public to see and discuss.</p>
-    <dl class="meta"><div><dt>Course</dt><dd>COMM2754 Programming for Digital Media, University of Leeds</dd></div><div><dt>Year</dt><dd>2025</dd></div><div><dt>My role</dt><dd>Individual project</dd></div><div><dt>Tools</dt><dd>PHP, MySQL database in cPanel, Chart.js</dd></div></dl>
+    <h1>Plays for a minimum wage</h1>
+    <p class="summary">How many times does a song have to be played for a musician to make a living? I imported a public dataset on musicians’ digital royalties into a MySQL database, read it with PHP and charted the answer, outlet by outlet, with Chart.js.</p>
+    <dl class="meta"><div><dt>Course</dt><dd>COMM2754 Programming for Digital Media, University of Leeds</dd></div><div><dt>Year</dt><dd>2025</dd></div><div><dt>My role</dt><dd>Individual project</dd></div><div><dt>Tools</dt><dd>PHP, MySQL (cPanel), Chart.js</dd></div><div><dt>Data</dt><dd>Musician digital royalties (2013), InformationIsBeautiful.net</dd></div></dl>
   </header>
-  <figure class="media"><div class="ph wide">[截图] 图表页面截图（music_chart.php）</div></figure>
-  <section class="cs-block"><h2>Why this data</h2><div class="body"><p>I chose musicians’ digital royalties because the numbers themselves make the strongest case for how little creators earn in the streaming era. Schrock (2016) describes civic hacking as data activism: requesting, digesting, modelling and contesting data. Turning a raw table into charts anyone can read is the digesting and modelling part.</p></div></section><section class="cs-block"><h2>How it works</h2><div class="body"><p>I created a database in cPanel, wrote PHP to retrieve the data into two pages, a data table and a chart page, and used Chart.js to draw the charts.</p><div class="ph sq">[截图] 数据表页面（music_data.php），以及一段 PHP 代码</div></div></section><section class="cs-block"><h2>What it shows</h2><div class="body"><p>One figure made the point on its own: on Last.fm, a musician needs more than 15 million plays to earn the equivalent of a minimum wage. <span class="todo">[待补充：数据来源是什么？]</span></p></div></section><section class="cs-block"><h2>Looking back</h2><div class="body"><p>As media students we can do more than build websites. Obtaining, analysing and questioning data are ways to take on social responsibility, and code can bring the hidden workings of abstract systems to light.</p></div></section>
+  <figure class="media"><figure class="code"><pre><code>// music_chart.php (excerpt; database credentials removed)
+$stm = $conn-&gt;query("SELECT * FROM `musician_digital_royalties_public_2013___simple`");
+$rows = $stm-&gt;fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($rows as $row) {
+    $outlets .= "'" . $row['Outlet'] . "',";
+    $values  .= str_replace(",", "", $row['PPM']) . ",";   // plays per month
+}
+...
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [&lt;?php echo $outlets; ?&gt;],
+        datasets: [{ label: 'Plays Needed for Min Wage',
+                     data: [&lt;?php echo $values; ?&gt;] }]
+    }
+});</code></pre><figcaption>The chart page: PHP reads each outlet from MySQL and passes the figures to Chart.js</figcaption></figure></figure>
+  <section class="cs-block"><h2>Why this data</h2><div class="body"><p>I chose musicians’ digital royalties because the numbers themselves make the strongest case: per-play earnings are so low that it takes millions of plays to earn a living. Schrock (2016) describes civic hacking as data activism: requesting, digesting, modelling and contesting data. Turning a raw table into something anyone can read is the digesting and modelling part.</p></div></section><section class="cs-block"><h2>How it works</h2><div class="body"><p>I created a MySQL database in cPanel and imported the dataset. Two PHP pages read from it:</p><ul><li><strong>Data page</strong>: lists each outlet with artist type, format, retail price, and the plays per month needed to earn a minimum wage.</li><li><strong>Chart page</strong>: sends the same plays-per-month figures to Chart.js as a bar chart, one bar per outlet.</li></ul></div></section><section class="cs-block"><h2>What it shows</h2><div class="body"><p>Once charted, the gap is hard to ignore. On Last.fm, a musician needs more than 15 million plays a month to earn a minimum wage.</p></div></section><section class="cs-block"><h2>Looking back</h2><div class="body"><p>As media students we can do more than build websites. Obtaining, analysing and questioning data are ways to take on social responsibility, and code can bring the hidden workings of abstract systems to light.</p></div></section>
   <a class="next" href="wikipedia-ai.html"><span>Next project</span><strong>Scraping a Wikipedia article</strong></a>
 </article>
 </main>

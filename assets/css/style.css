@@ -297,3 +297,12 @@ a:hover { color: var(--ultra); }
   .triptych .shot:last-child { display: none; }
 }
 .gallery .shot img { max-height: 520px; width: auto; max-width: 100%; }
+
+/* Code excerpts */
+figure.code { margin: 2.5rem 0; min-width: 0; }
+figure.code pre {
+  margin: 0; overflow-x: auto; padding: 1.25rem 1.5rem;
+  background: #15153D; color: #E9E9F5; border-radius: 0;
+  font: 0.9rem/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+figure.code figcaption { font-family: var(--display); font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
