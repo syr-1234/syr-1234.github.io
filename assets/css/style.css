@@ -282,3 +282,18 @@ a:hover { color: var(--ultra); }
 }
 .strip a:hover { color: var(--ultra); }
 .strip + .peek + .site-foot, main + .site-foot { margin-top: 0; }
+
+/* ---------- Real images ---------- */
+.shot { margin: 0; min-width: 0; }
+.shot img { width: 100%; height: auto; border: 2px solid var(--ink); background: var(--ink); }
+.shot figcaption { font-family: var(--display); font-size: 0.9rem; color: var(--muted); margin-top: 0.45rem; }
+.cs-block .body > .shot { max-width: 100%; margin-top: 1rem; }
+.triptych { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(0.5rem, 1.5vw, 1.25rem); }
+.gallery.two { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.gallery.three { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+@media (max-width: 640px) {
+  .gallery.two, .gallery.three { grid-template-columns: 1fr; }
+  .triptych { grid-template-columns: 1fr 1fr; }
+  .triptych .shot:last-child { display: none; }
+}
+.gallery .shot img { max-height: 520px; width: auto; max-width: 100%; }
