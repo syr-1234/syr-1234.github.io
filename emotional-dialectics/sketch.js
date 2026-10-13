@@ -224,6 +224,7 @@ function drawDashboard() {
     }
 
     // Emotion Legend (explicit semantics)
+    textAlign(LEFT); // legend labels sit to the right of each swatch
     let legendX = chartX + chartWidth + 30;
     let legendY = chartY;
 
