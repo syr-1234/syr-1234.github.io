@@ -19,3 +19,26 @@
     peek.style.transform = 'translate(' + x + 'px,' + y + 'px)';
   });
 })();
+
+// Two-view switch (Emotional Dialectics): buttons swap the image; it also
+// alternates on its own until the viewer clicks, unless reduced motion is set.
+(function () {
+  document.querySelectorAll('.viewswitch').forEach(function (box) {
+    var imgs = box.querySelectorAll('.vs-stage img');
+    var btns = box.querySelectorAll('.vs-buttons button');
+    var current = 0, timer = null;
+    function show(i) {
+      current = i;
+      imgs.forEach(function (im, k) { im.hidden = k !== i; });
+      btns.forEach(function (b, k) { b.classList.toggle('on', k === i); b.setAttribute('aria-pressed', k === i); });
+    }
+    btns.forEach(function (b, k) {
+      b.addEventListener('click', function () { if (timer) { clearInterval(timer); timer = null; } show(k); });
+    });
+    show(0);
+    var ms = parseInt(box.dataset.auto, 10);
+    if (ms && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      timer = setInterval(function () { show((current + 1) % imgs.length); }, ms);
+    }
+  });
+})();
