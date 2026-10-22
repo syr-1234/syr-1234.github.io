@@ -42,3 +42,20 @@
     }
   });
 })();
+
+// Video cover: the YouTube player loads only when the viewer clicks play.
+(function () {
+  document.querySelectorAll('.yt[data-yt]').forEach(function (box) {
+    var btn = box.querySelector('.yt-play');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + box.dataset.yt + '?autoplay=1&rel=0';
+      f.title = btn.getAttribute('aria-label').replace('Play the film ', '');
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.allowFullscreen = true;
+      box.replaceChild(f, btn);
+    });
+  });
+})();

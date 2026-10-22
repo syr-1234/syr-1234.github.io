@@ -372,3 +372,10 @@ ul.refs li { padding-left: 1.5em; text-indent: -1.5em; margin-bottom: 0.6em; }
 .team.sb td:first-child { width: 2.5rem; }
 [hidden] { display: none !important; }
 .cs-head .media { margin-block: 1.75rem 0; }
+
+/* Click-to-play video cover */
+.yt-play { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; cursor: pointer; background: #000; }
+.yt-icon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 4.5rem; height: 4.5rem; border-radius: 50%;
+  display: grid; place-items: center; font-size: 1.6rem; padding-left: 0.3rem; background: var(--ultra, #2E2BFF); color: #fff; transition: transform .2s; }
+.yt-play:hover .yt-icon, .yt-play:focus-visible .yt-icon { transform: translate(-50%, -50%) scale(1.1); }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
