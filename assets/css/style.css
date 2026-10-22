@@ -366,7 +366,8 @@ ul.refs li { padding-left: 1.5em; text-indent: -1.5em; margin-bottom: 0.6em; }
 .vs-stage img { width: 100%; aspect-ratio: 1776 / 874; object-fit: cover; }
 
 /* Storyboard table */
-.table-scroll { overflow-x: auto; margin-top: 1rem; }
+.table-scroll { overflow-x: auto; margin-top: 1rem; max-width: 100%; }
+.cs-block > *, .cs-block .body { min-width: 0; }
 .team.sb { min-width: 640px; font-size: 0.95rem; }
 .team.sb td:first-child { width: 2.5rem; }
 [hidden] { display: none !important; }
